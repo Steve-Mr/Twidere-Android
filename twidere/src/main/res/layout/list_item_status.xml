@@ -172,7 +172,7 @@
 
         <org.mariotaku.twidere.view.ActionIconThemedTextView
             android:id="@+id/mediaLabel"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/text"
             android:layout_alignLeft="@+id/text"
@@ -184,7 +184,7 @@
             android:drawableLeft="@drawable/ic_label_gallery"
             android:drawableStart="@drawable/ic_label_gallery"
             android:gravity="center_vertical"
-            android:minHeight="@dimen/element_size_small"
+            android:minHeight="@dimen/element_size_normal"
             android:textAppearance="?android:textAppearanceSmall"
             android:textStyle="bold"
             app:iabColor="?android:textColorSecondary"
@@ -343,10 +343,11 @@
 
         <LinearLayout
             android:id="@+id/reply"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?selectableItemBackgroundBorderless"
-            android:focusable="false">
+            android:focusable="false"
+            android:layout_weight="1">
 
             <org.mariotaku.twidere.view.IconActionView
                 android:id="@+id/replyIcon"
@@ -379,7 +380,8 @@
 
         <LinearLayout
             android:id="@+id/retweet"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/element_spacing_small"
             android:layout_marginStart="@dimen/element_spacing_small"
@@ -418,7 +420,8 @@
 
         <LinearLayout
             android:id="@+id/favorite"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/element_spacing_small"
             android:layout_marginStart="@dimen/element_spacing_small"
@@ -452,6 +455,31 @@
                 android:minHeight="@dimen/button_size_content_card_action"
                 android:textAppearance="?android:textAppearanceSmall"
                 tools:text="255"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/share"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/element_spacing_small"
+            android:layout_marginStart="@dimen/element_spacing_small"
+            android:background="?selectableItemBackgroundBorderless"
+            android:focusable="false">
+
+            <org.mariotaku.twidere.view.IconActionView
+                android:id="@+id/favoriteIcon"
+                android:layout_width="@dimen/button_size_content_card_action"
+                android:layout_height="@dimen/button_size_content_card_action"
+                android:contentDescription="@string/action_like"
+                android:focusable="false"
+                android:gravity="center"
+                android:padding="@dimen/element_spacing_small"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_share"
+                app:iabActivatedColor="@color/highlight_like"
+                app:iabColor="?android:textColorSecondary"
+                tools:tint="?android:textColorSecondary"/>
         </LinearLayout>
     </LinearLayout>
 

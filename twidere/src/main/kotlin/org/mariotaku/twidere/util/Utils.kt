@@ -152,7 +152,7 @@ object Utils {
     fun createStatusShareIntent(context: Context, status: ParcelableStatus): Intent {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_SUBJECT, IntentUtils.getStatusShareSubject(context, status))
+        //intent.putExtra(Intent.EXTRA_SUBJECT, IntentUtils.getStatusShareSubject(context, status))
         intent.putExtra(Intent.EXTRA_TEXT, IntentUtils.getStatusShareText(context, status))
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         return intent

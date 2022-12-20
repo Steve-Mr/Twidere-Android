@@ -37,8 +37,10 @@ object IntentUtils {
 
     fun getStatusShareText(context: Context, status: ParcelableStatus): String {
         val link = LinkCreator.getStatusWebLink(status)
-        return context.getString(R.string.status_share_text_format_with_link,
-                status.text_plain, link.toString())
+        // return context.getString(R.string.status_share_text_format_with_link,
+        //        status.text_plain, link.toString())
+        return link.toString()
+        //todo：add settings for this
     }
 
     fun getStatusShareSubject(context: Context, status: ParcelableStatus): String {

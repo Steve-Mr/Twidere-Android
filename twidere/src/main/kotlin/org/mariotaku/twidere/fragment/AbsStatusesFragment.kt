@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import android.view.*
+import android.widget.Toast
 import androidx.loader.app.LoaderManager
 import com.squareup.otto.Subscribe
 import kotlinx.android.synthetic.main.fragment_content_recyclerview.*
@@ -642,6 +643,12 @@ abstract class AbsStatusesFragment : AbsContentListRecyclerViewFragment<Parcelab
                             holder.playLikeAnimation(DefaultOnLikedListener(fragment.twitterWrapper, status))
                         }
                     }
+                }
+                R.id.share -> {
+                    //Toast.makeText(fragment.activity, "share", Toast.LENGTH_SHORT).show()
+                    val shareIntent = fragment.activity?.let { Utils.createStatusShareIntent(it, status) }
+                    val chooser = Intent.createChooser(shareIntent, fragment.getString(R.string.share_status))
+                    fragment.startActivity(chooser)
                 }
             }
         }

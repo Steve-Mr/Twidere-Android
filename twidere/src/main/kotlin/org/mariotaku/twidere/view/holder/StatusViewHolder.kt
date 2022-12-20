@@ -90,6 +90,7 @@ class StatusViewHolder(private val adapter: IStatusesAdapter<*>, itemView: View)
     private val replyButton by lazy { itemView.reply }
     private val retweetButton by lazy { itemView.retweet }
     private val favoriteButton by lazy { itemView.favorite }
+    private val shareButton by lazy { itemView.share }
 
     private val eventListener: EventListener
 
@@ -521,6 +522,7 @@ class StatusViewHolder(private val adapter: IStatusesAdapter<*>, itemView: View)
         favoriteButton.setOnClickListener(eventListener)
         retweetButton.setOnLongClickListener(eventListener)
         favoriteButton.setOnLongClickListener(eventListener)
+        shareButton.setOnClickListener(eventListener)
 
         mediaLabel.setOnClickListener(eventListener)
 
@@ -724,6 +726,9 @@ class StatusViewHolder(private val adapter: IStatusesAdapter<*>, itemView: View)
                 }
                 holder.favoriteButton -> {
                     listener.onItemActionClick(holder, R.id.favorite, position)
+                }
+                holder.shareButton -> {
+                    listener.onItemActionClick(holder, R.id.share, position)
                 }
                 holder.mediaLabel -> {
                     if (position < 0) return
