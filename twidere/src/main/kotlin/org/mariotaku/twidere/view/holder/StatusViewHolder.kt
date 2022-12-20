@@ -701,7 +701,11 @@ class StatusViewHolder(private val adapter: IStatusesAdapter<*>, itemView: View)
             val position = holder.layoutPosition
             when (v) {
                 holder.itemContent -> {
-                    listener.onStatusClick(holder, position)
+                    if (!holder.isCardActionsShown) {
+                        holder.showCardActions()
+                    } else if (holder.hideTempCardActions()) {
+                        listener.onStatusClick(holder, position)
+                    }
                 }
                 holder.quotedView -> {
                     listener.onQuotedStatusClick(holder, position)
@@ -743,7 +747,7 @@ class StatusViewHolder(private val adapter: IStatusesAdapter<*>, itemView: View)
             when (v) {
                 holder.itemContent -> {
                     if (!holder.isCardActionsShown) {
-                        holder.showCardActions()
+                        listener.onStatusClick(holder, position)
                         return true
                     } else if (holder.hideTempCardActions()) {
                         return true
