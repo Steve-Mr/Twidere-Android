@@ -751,12 +751,13 @@ class StatusViewHolder(private val adapter: IStatusesAdapter<*>, itemView: View)
             val position = holder.layoutPosition
             when (v) {
                 holder.itemContent -> {
-                    if (!holder.isCardActionsShown) {
-                        listener.onStatusClick(holder, position)
-                        return true
-                    } else if (holder.hideTempCardActions()) {
-                        return true
-                    }
+                    listener.onStatusClick(holder, position)
+//                    if (!holder.isCardActionsShown) {
+//                        listener.onStatusClick(holder, position)
+//                        return true
+//                    } else if (holder.hideTempCardActions()) {
+//                        return true
+//                    }
                     return listener.onStatusLongClick(holder, position)
                 }
                 holder.favoriteButton -> {
