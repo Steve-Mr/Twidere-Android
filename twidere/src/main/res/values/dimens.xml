@@ -51,6 +51,7 @@
     <dimen name="element_spacing_xlarge">24dp</dimen>
     <!-- Element spacings (padding, margin) -->
     <dimen name="element_spacing_xsmall">2dp</dimen>
+    <dimen name="element_spacing_normal_large">16dp</dimen>
 
     <!-- Elevation values -->
     <dimen name="elevation_card">2dp</dimen>

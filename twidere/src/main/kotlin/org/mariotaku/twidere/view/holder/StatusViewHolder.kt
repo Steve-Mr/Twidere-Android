@@ -181,7 +181,7 @@ class StatusViewHolder(private val adapter: IStatusesAdapter<*>, itemView: View)
             val retweetedBy = colorNameManager.getDisplayName(status.retweeted_by_user_key!!,
                     status.retweeted_by_user_name, status.retweeted_by_user_acct!!, nameFirst)
             statusInfoLabel.spannable = context.getString(R.string.name_retweeted, formatter.unicodeWrap(retweetedBy))
-            statusInfoIcon.setImageResource(R.drawable.ic_activity_action_retweet)
+            statusInfoIcon.setImageResource(R.drawable.ic_action_retweet)
             statusInfoLabel.visibility = View.VISIBLE
             statusInfoIcon.visibility = View.VISIBLE
 
@@ -194,7 +194,7 @@ class StatusViewHolder(private val adapter: IStatusesAdapter<*>, itemView: View)
             } else {
                 statusInfoLabel.spannable = context.getString(R.string.label_status_type_reply)
             }
-            statusInfoIcon.setImageResource(R.drawable.ic_activity_action_reply)
+            statusInfoIcon.setImageResource(R.drawable.ic_action_reply)
             statusInfoLabel.visibility = View.VISIBLE
             statusInfoIcon.visibility = View.VISIBLE
 
