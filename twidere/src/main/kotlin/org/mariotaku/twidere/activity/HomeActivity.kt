@@ -122,6 +122,7 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
 
     private var propertiesInitialized = false
     private var actionsButtonBottomMargin: Int = 0
+    private var refreshButtonBottomMargin: Int = 0
 
     private var updateUnreadCountTask: UpdateUnreadCountTask? = null
     private val readStateChangeListener = OnSharedPreferenceChangeListener { _, _ -> updateUnreadCount() }
@@ -252,6 +253,7 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
             actionsButton.visibility = View.GONE
         }
         actionsButtonBottomMargin = (actionsButton.layoutParams as MarginLayoutParams).bottomMargin
+        refreshButtonBottomMargin = (refreshButton.layoutParams as MarginLayoutParams).bottomMargin
 
         homeContent.addOnLayoutChangeListener { _, _, top, _, _, _, oldTop, _, _ ->
             if (top != oldTop) {
@@ -264,6 +266,10 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
 
         actionsButton.setOnClickListener(this)
         actionsButton.setOnLongClickListener(this)
+
+        refreshButton.setOnClickListener(this)
+        refreshButton.setOnLongClickListener(this)
+
         drawerToggleButton.setOnClickListener(this)
         emptyTabHint.setOnClickListener(this)
 
@@ -348,6 +354,16 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
             actionsButton -> {
                 triggerActionsClick()
             }
+            refreshButton -> {
+                val position = mainPager.currentItem
+
+//                if (context !is SupportFragmentCallback) return
+                val f = pagerAdapter.instantiateItem(mainPager, position)
+                if (f is RefreshScrollTopInterface) {
+                    f.scrollToStart()
+                }
+                triggerRefresh(position)
+            }
             emptyTabHint -> {
                 startActivityForResult(IntentUtils.settings("tabs"), REQUEST_SETTINGS)
             }
@@ -430,6 +446,12 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
                 } else {
                     0
                 }
+        (refreshButton.layoutParams as? MarginLayoutParams)?.bottomMargin =
+            refreshButtonBottomMargin + if (preferences[tabPositionKey] == SharedPreferenceConstants.VALUE_TAB_POSITION_TOP) {
+                insets.systemWindowInsetBottom
+            } else {
+                0
+            }
         return insets
     }
 
@@ -623,10 +645,16 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
                 toolbar.translationY = translationY.toFloat()
                 windowOverlay.translationY = translationY.toFloat()
                 val lp = actionsButton.layoutParams
+                val lpr = refreshButton.layoutParams
                 if (lp is MarginLayoutParams) {
                     actionsButton.translationY = (lp.bottomMargin + actionsButton.height) * (1 - offset)
                 } else {
                     actionsButton.translationY = actionsButton.height * (1 - offset)
+                }
+                if (lpr is MarginLayoutParams) {
+                    refreshButton.translationY = (lpr.bottomMargin + refreshButton.height) * (1 - offset)
+                } else {
+                    refreshButton.translationY = refreshButton.height * (1 - offset)
                 }
                 notifyControlBarOffsetChanged()
             } else {
@@ -648,6 +676,13 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
                     actionsButton.translationY = (lp.bottomMargin + toolbar.height + actionsButton.height + toolbarMarginBottom) * (1 - offset)
                 } else {
                     actionsButton.translationY = actionsButton.height * (1 - offset)
+                }
+
+                val lpr = refreshButton.layoutParams
+                if (lpr is MarginLayoutParams) {
+                    refreshButton.translationY = (lpr.bottomMargin + toolbar.height + refreshButton.height + toolbarMarginBottom) * (1 - offset)
+                } else {
+                    refreshButton.translationY = refreshButton.height * (1 - offset)
                 }
                 notifyControlBarOffsetChanged()
             }
@@ -846,6 +881,7 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
             0xFF
         }
         actionsButton.alpha = actionBarAlpha / 255f
+        refreshButton.alpha = actionBarAlpha / 255f
     }
 
     private fun setupHomeTabs() {
@@ -875,6 +911,9 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
             actionsButton.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
             }
+            refreshButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+                addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+            }
         } else if (preferences[tabPositionKey] == SharedPreferenceConstants.VALUE_TAB_POSITION_TOP) {
             toolbar.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
@@ -882,11 +921,17 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
             actionsButton.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
             }
+            refreshButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+                addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+            }
         } else {
             toolbar.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
             }
             actionsButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+                addRule(RelativeLayout.ABOVE, toolbar.id)
+            }
+            refreshButton.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ABOVE, toolbar.id)
             }
         }

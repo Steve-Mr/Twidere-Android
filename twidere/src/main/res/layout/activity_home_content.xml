@@ -89,4 +89,18 @@
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/refreshButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="@dimen/element_spacing_large"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_action_refresh"
+        app:backgroundTint="?colorToolbar"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"/>
+
 </org.mariotaku.twidere.view.ExtendedRelativeLayout>
