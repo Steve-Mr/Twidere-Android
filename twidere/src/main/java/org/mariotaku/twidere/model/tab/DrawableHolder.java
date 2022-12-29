@@ -67,6 +67,8 @@ public abstract class DrawableHolder {
                 return Builtin.FAVORITE;
             case "web":
                 return Builtin.WEB;
+            case "mastodon":
+                return Builtin.MASTODON;
         }
         return null;
     }
@@ -118,6 +120,7 @@ public abstract class DrawableHolder {
                 // End of default built-in icons
                 "favorite",
                 "web",
+                "mastodon",
         };
         List<DrawableHolder> list = new ArrayList<>();
         for (String key : keys) {
@@ -177,6 +180,8 @@ public abstract class DrawableHolder {
         public static final DrawableHolder TRENDS = new Builtin("trends", R.drawable.ic_action_trends);
         @NonNull
         public static final DrawableHolder TWIDERE = new Builtin("twidere", R.drawable.ic_action_twidere);
+        @NonNull
+        public static final DrawableHolder MASTODON = new Builtin("mastodon", R.drawable.ic_action_mastodon);
         @NonNull
         public static final DrawableHolder TWITTER = new Builtin("twitter", R.drawable.ic_action_twitter);
         @NonNull
