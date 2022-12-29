@@ -38,10 +38,7 @@ import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.util.SparseIntArray
-import android.view.Gravity
-import android.view.KeyEvent
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.View.OnClickListener
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup.MarginLayoutParams
@@ -122,6 +119,9 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
 
     private var propertiesInitialized = false
     private var actionsButtonBottomMargin: Int = 0
+    private var refreshButtonBottomMargin: Int = 0
+
+    private var fabLayoutBottomMargin: Int = 0
 
     private var updateUnreadCountTask: UpdateUnreadCountTask? = null
     private val readStateChangeListener = OnSharedPreferenceChangeListener { _, _ -> updateUnreadCount() }
@@ -251,7 +251,10 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
         } else {
             actionsButton.visibility = View.GONE
         }
-        actionsButtonBottomMargin = (actionsButton.layoutParams as MarginLayoutParams).bottomMargin
+//        actionsButtonBottomMargin = (actionsButton.layoutParams as MarginLayoutParams).bottomMargin
+//        refreshButtonBottomMargin = (refreshButton.layoutParams as MarginLayoutParams).bottomMargin
+
+        fabLayoutBottomMargin = (fabLayout.layoutParams as MarginLayoutParams).bottomMargin
 
         homeContent.addOnLayoutChangeListener { _, _, top, _, _, _, oldTop, _, _ ->
             if (top != oldTop) {
@@ -264,8 +267,20 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
 
         actionsButton.setOnClickListener(this)
         actionsButton.setOnLongClickListener(this)
+
+        refreshButton.setOnClickListener(this)
+        refreshButton.setOnLongClickListener(this)
+
+        searchButton.setOnClickListener(this)
+        searchButton.setOnLongClickListener(this)
+
+        drawerButton.setOnClickListener(this)
+        drawerButton.setOnLongClickListener(this)
+
         drawerToggleButton.setOnClickListener(this)
         emptyTabHint.setOnClickListener(this)
+
+        searchToolbar.setOnClickListener(this)
 
         setupSlidingMenu()
         setupBars()
@@ -348,6 +363,16 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
             actionsButton -> {
                 triggerActionsClick()
             }
+            refreshButton -> {
+                val position = mainPager.currentItem
+
+//                if (context !is SupportFragmentCallback) return
+                val f = pagerAdapter.instantiateItem(mainPager, position)
+                if (f is RefreshScrollTopInterface) {
+                    f.scrollToStart()
+                }
+                triggerRefresh(position)
+            }
             emptyTabHint -> {
                 startActivityForResult(IntentUtils.settings("tabs"), REQUEST_SETTINGS)
             }
@@ -357,6 +382,25 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
                 } else {
                     homeMenu.openDrawer(GravityCompat.START)
                 }
+            }
+            drawerButton -> {
+                if (homeMenu.isDrawerOpen(GravityCompat.START) || homeMenu.isDrawerOpen(GravityCompat.END)) {
+                    homeMenu.closeDrawers()
+                } else {
+                    homeMenu.openDrawer(GravityCompat.START)
+                }
+            }
+            searchToolbar -> {
+//                val account = accountsAdapter.selectedAccount ?: false
+                val intent = Intent(this, QuickSearchBarActivity::class.java)
+//                intent.putExtra(EXTRA_ACCOUNT_KEY, account.key)
+                startActivity(intent)
+            }
+            searchButton -> {
+//                val account = accountsAdapter.selectedAccount ?: false
+                val intent = Intent(this, QuickSearchBarActivity::class.java)
+//                intent.putExtra(EXTRA_ACCOUNT_KEY, account.key)
+                startActivity(intent)
             }
         }
     }
@@ -372,7 +416,27 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+//        if (position == 0 && positionOffset < 0){
+//            homeMenu.openDrawer(GravityCompat.START)
+//        }
     }
+
+//    override fun onTouchEvent(event: MotionEvent?): Boolean {
+////        if (mainTabs.columns == 0){
+//            if (event != null) {
+//                var x1 = 0f
+//                var x2: Float
+//                if(event.action == MotionEvent.ACTION_DOWN)
+//                    x1 = event.x
+//                if(event.action == MotionEvent.ACTION_UP) {
+//                    x2 = event.x
+//                    if((x2-x1)>1)
+//                        homeMenu.openDrawer(GravityCompat.START)
+//                }
+//            }
+////        }
+//        return super.onTouchEvent(event)
+//    }
 
     override fun onPageSelected(position: Int) {
         //TODO handle secondary drawer
@@ -424,12 +488,24 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
             homeContent.setPadding(0, insets.systemWindowInsetTop, 0, 0)
         }
         (toolbar.layoutParams as? MarginLayoutParams)?.bottomMargin = insets.systemWindowInsetBottom
-        (actionsButton.layoutParams as? MarginLayoutParams)?.bottomMargin =
-                actionsButtonBottomMargin + if (preferences[tabPositionKey] == SharedPreferenceConstants.VALUE_TAB_POSITION_TOP) {
-                    insets.systemWindowInsetBottom
-                } else {
-                    0
-                }
+//        (actionsButton.layoutParams as? MarginLayoutParams)?.bottomMargin =
+//                actionsButtonBottomMargin + if (preferences[tabPositionKey] == SharedPreferenceConstants.VALUE_TAB_POSITION_TOP) {
+//                    insets.systemWindowInsetBottom
+//                } else {
+//                    0
+//                }
+//        (refreshButton.layoutParams as? MarginLayoutParams)?.bottomMargin =
+//            refreshButtonBottomMargin + if (preferences[tabPositionKey] == SharedPreferenceConstants.VALUE_TAB_POSITION_TOP) {
+//                insets.systemWindowInsetBottom
+//            } else {
+//                0
+//            }
+        (fabLayout.layoutParams as? MarginLayoutParams)?.bottomMargin =
+            fabLayoutBottomMargin + if (preferences[tabPositionKey] == SharedPreferenceConstants.VALUE_TAB_POSITION_TOP) {
+                insets.systemWindowInsetBottom
+            } else {
+                0
+            }
         return insets
     }
 
@@ -623,10 +699,23 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
                 toolbar.translationY = translationY.toFloat()
                 windowOverlay.translationY = translationY.toFloat()
                 val lp = actionsButton.layoutParams
-                if (lp is MarginLayoutParams) {
-                    actionsButton.translationY = (lp.bottomMargin + actionsButton.height) * (1 - offset)
+                val lpr = refreshButton.layoutParams
+//                if (lp is MarginLayoutParams) {
+//                    actionsButton.translationY = (lp.bottomMargin + actionsButton.height) * (1 - offset)
+//                } else {
+//                    actionsButton.translationY = actionsButton.height * (1 - offset)
+//                }
+//                if (lpr is MarginLayoutParams) {
+//                    refreshButton.translationY = (lpr.bottomMargin + refreshButton.height) * (1 - offset)
+//                } else {
+//                    refreshButton.translationY = refreshButton.height * (1 - offset)
+//                }
+
+                val lpf = fabLayout.layoutParams
+                if(lpf is MarginLayoutParams) {
+                    fabLayout.translationY = (lpf.bottomMargin + fabLayout.height) * (1 - offset)
                 } else {
-                    actionsButton.translationY = actionsButton.height * (1 - offset)
+                    fabLayout.translationY = fabLayout.height * (1 - offset)
                 }
                 notifyControlBarOffsetChanged()
             } else {
@@ -643,11 +732,25 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
                 }
                 toolbar.translationY = -translationY.toFloat()
                 windowOverlay.translationY = -translationY.toFloat()
-                val lp = actionsButton.layoutParams
-                if (lp is MarginLayoutParams) {
-                    actionsButton.translationY = (lp.bottomMargin + toolbar.height + actionsButton.height + toolbarMarginBottom) * (1 - offset)
+//                val lp = actionsButton.layoutParams
+//                if (lp is MarginLayoutParams) {
+//                    actionsButton.translationY = (lp.bottomMargin + toolbar.height + actionsButton.height + toolbarMarginBottom) * (1 - offset)
+//                } else {
+//                    actionsButton.translationY = actionsButton.height * (1 - offset)
+//                }
+//
+//                val lpr = refreshButton.layoutParams
+//                if (lpr is MarginLayoutParams) {
+//                    refreshButton.translationY = (lpr.bottomMargin + toolbar.height + refreshButton.height + toolbarMarginBottom) * (1 - offset)
+//                } else {
+//                    refreshButton.translationY = refreshButton.height * (1 - offset)
+//                }
+
+                val lpf = fabLayout.layoutParams
+                if (lpf is MarginLayoutParams) {
+                    fabLayout.translationY = (lpf.bottomMargin + toolbar.height + fabLayout.height + toolbarMarginBottom) * (1 - offset)
                 } else {
-                    actionsButton.translationY = actionsButton.height * (1 - offset)
+                    fabLayout.translationY = fabLayout.height * (1 - offset)
                 }
                 notifyControlBarOffsetChanged()
             }
@@ -846,6 +949,7 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
             0xFF
         }
         actionsButton.alpha = actionBarAlpha / 255f
+        refreshButton.alpha = actionBarAlpha / 255f
     }
 
     private fun setupHomeTabs() {
@@ -872,21 +976,39 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
         }
         if (pagerAdapter.count == 1 && preferences[autoHideTabs]) {
             toolbar.isVisible = false
-            actionsButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+//            actionsButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+//                addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+//            }
+//            refreshButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+//                addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+//            }
+            fabLayout.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
             }
         } else if (preferences[tabPositionKey] == SharedPreferenceConstants.VALUE_TAB_POSITION_TOP) {
             toolbar.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
             }
-            actionsButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+//            actionsButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+//                addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+//            }
+//            refreshButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+//                addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+//            }
+            fabLayout.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
             }
         } else {
             toolbar.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
             }
-            actionsButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+//            actionsButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+//                addRule(RelativeLayout.ABOVE, toolbar.id)
+//            }
+//            refreshButton.updateLayoutParams<RelativeLayout.LayoutParams> {
+//                addRule(RelativeLayout.ABOVE, toolbar.id)
+//            }
+            fabLayout.updateLayoutParams<RelativeLayout.LayoutParams> {
                 addRule(RelativeLayout.ABOVE, toolbar.id)
             }
         }

@@ -38,7 +38,7 @@ import org.mariotaku.twidere.R
 class NameView(context: Context, attrs: AttributeSet? = null) : FixedTextView(context, attrs) {
 
     var nameFirst: Boolean = false
-    var twoLine: Boolean = false
+    var twoLine: Boolean = true
         set(value) {
             field = value
             maxLines = if (value) {
@@ -63,7 +63,7 @@ class NameView(context: Context, attrs: AttributeSet? = null) : FixedTextView(co
         val a = context.obtainStyledAttributes(attrs, R.styleable.NameView, 0, 0)
         setPrimaryTextColor(a.getColor(R.styleable.NameView_nv_primaryTextColor, 0))
         setSecondaryTextColor(a.getColor(R.styleable.NameView_nv_secondaryTextColor, 0))
-        twoLine = a.getBoolean(R.styleable.NameView_nv_twoLine, false)
+        twoLine = a.getBoolean(R.styleable.NameView_nv_twoLine, true)
         primaryTextStyle = StyleSpan(a.getInt(R.styleable.NameView_nv_primaryTextStyle, 0))
         secondaryTextStyle = StyleSpan(a.getInt(R.styleable.NameView_nv_secondaryTextStyle, 0))
         a.recycle()

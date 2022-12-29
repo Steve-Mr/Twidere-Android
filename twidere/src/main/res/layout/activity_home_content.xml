@@ -42,30 +42,64 @@
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" >
+                </Space>
+
+                <ImageButton
+                    android:id="@+id/drawerToggleButton"
+                    style="?borderlessButtonStyle"
+                    android:layout_width="?actionBarSize"
+                    android:layout_height="?actionBarSize"
+                    android:layout_weight="1"
+                    android:background="?actionBarItemBackground"
+                    android:contentDescription="@string/open_accounts_dashboard"/>
+
+                <org.mariotaku.twidere.view.TabPagerIndicator
+                    android:id="@+id/mainTabs"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="10"
+                    app:tabDisplayOption="icon"
+                    app:tabExpandEnabled="true"
+                    app:tabHorizontalPadding="@dimen/element_spacing_normal"
+                    tools:listitem="@layout/layout_tab_item"/>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" >
+                </Space>
+            </LinearLayout>
+
             <ImageButton
-                android:id="@+id/drawerToggleButton"
-                style="?borderlessButtonStyle"
+                android:id="@+id/searchToolbar"
                 android:layout_width="?actionBarSize"
                 android:layout_height="?actionBarSize"
-                android:layout_weight="0"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_action_search"
                 android:background="?actionBarItemBackground"
-                android:contentDescription="@string/open_accounts_dashboard"/>
+                android:visibility="gone"
+                />
 
-            <org.mariotaku.twidere.view.TabPagerIndicator
-                android:id="@+id/mainTabs"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:tabDisplayOption="icon"
-                app:tabExpandEnabled="true"
-                app:tabHorizontalPadding="@dimen/element_spacing_normal"
-                tools:listitem="@layout/layout_tab_item"/>
-        </LinearLayout>
+        </RelativeLayout>
+
     </androidx.appcompat.widget.Toolbar>
 
     <View
@@ -75,18 +109,96 @@
         android:layout_below="@+id/toolbar"
         android:background="?android:windowContentOverlay"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/actionsButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/fabLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/element_spacing_large"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_action_status_compose"
-        app:backgroundTint="?colorToolbar"
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/drawerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/element_spacing_large"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_action_drawer"
+            app:backgroundTint="?colorToolbar"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/refreshButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/element_spacing_large"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_action_refresh"
+            app:backgroundTint="?colorToolbar"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/element_spacing_large"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_action_search"
+            app:backgroundTint="?colorToolbar"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/actionsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/element_spacing_large"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_action_compose"
+            app:backgroundTint="?colorToolbar"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" >
+        </Space>
+
+
+    </LinearLayout>
+
 
 </org.mariotaku.twidere.view.ExtendedRelativeLayout>
