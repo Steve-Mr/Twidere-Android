@@ -23,6 +23,7 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.*
 import android.content.res.Resources
+import android.graphics.Color
 import android.graphics.Rect
 import android.nfc.NfcAdapter
 import android.os.Build
@@ -38,6 +39,7 @@ import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.TwidereActionMenuView
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.OnApplyWindowInsetsListener
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.Preference
@@ -439,7 +441,51 @@ open class BaseActivity : ChameleonActivity(), IBaseActivity<BaseActivity>, IThe
         when (navbarStyle) {
             NavbarStyle.TRANSPARENT -> {
                 if (resources.getBoolean(R.bool.support_translucent_navigation)) {
-                    window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+//                    window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+//                    window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+                    var systemUiVisibility = 0
+                    // Use a dark scrim by default since light status is API 23+
+                    var statusBarColor = Color.parseColor("#40000000")
+                    //  Use a dark scrim by default since light nav bar is API 27+
+                    var navigationBarColor = Color.parseColor("#40000000")
+                    val winParams = window.attributes
+
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                        statusBarColor = Color.TRANSPARENT
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                        navigationBarColor = Color.TRANSPARENT
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        systemUiVisibility = systemUiVisibility or
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        window.decorView.systemUiVisibility = systemUiVisibility
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                        winParams.flags = winParams.flags or
+                                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
+                                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        winParams.flags = winParams.flags and
+                                (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
+                                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION).inv()
+                        window.statusBarColor = statusBarColor
+                        window.navigationBarColor = navigationBarColor
+                    }
+
+                    window.attributes = winParams
+
+                    val windowInsetsController =
+                        ViewCompat.getWindowInsetsController(window.decorView)
+
+                    windowInsetsController?.isAppearanceLightNavigationBars = true
                 }
             }
             NavbarStyle.COLORED -> {

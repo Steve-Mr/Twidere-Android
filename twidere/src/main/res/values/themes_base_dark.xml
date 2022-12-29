@@ -17,7 +17,7 @@
   ~  along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.Twidere.Dark" parent="Theme.MaterialComponents.Bridge">
 
@@ -43,6 +43,10 @@
 
         <item name="actionBarTheme">@style/Theme.Twidere.Dark.ActionBar</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">
+            @android:color/transparent
+        </item>
     </style>
 
     <style name="Theme.Twidere.Dark.Content" parent="Theme.Twidere.Dark"/>
@@ -75,6 +79,10 @@
 
         <item name="actionBarTheme">@null</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">
+            @android:color/transparent
+        </item>
     </style>
 
     <style name="Theme.Twidere.Dark.NoActionBar" parent="Theme.Twidere.Dark">

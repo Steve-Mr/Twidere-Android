@@ -84,7 +84,7 @@ object ThemeUtils {
             theme.colorToolbar = ColorUtils.setAlphaComponent(theme.colorToolbar,
                     getActionBarAlpha(preferences[themeBackgroundAlphaKey]))
         }
-        theme.statusBarColor = ChameleonUtils.darkenColor(theme.colorToolbar)
+        theme.statusBarColor = theme.colorToolbar
         theme.lightStatusBarMode = Chameleon.Theme.LightStatusBarMode.AUTO
         theme.textColorLink = getOptimalAccentColor(theme.colorAccent, theme.colorForeground)
 
