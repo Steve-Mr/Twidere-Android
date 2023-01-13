@@ -20,7 +20,7 @@ allprojects {
         projectVersionCode = 517
         projectVersionName = '4.1.8'
 
-        globalCompileSdkVersion = 30
+        globalCompileSdkVersion = 31
         globalBuildToolsVersion = "30.0.3"
 
         globalMinSdkVersion = 16
