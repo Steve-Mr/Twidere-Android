@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import androidx.core.net.toUri
 import org.mariotaku.chameleon.Chameleon
 import org.mariotaku.ktextension.toLongOr
 import org.mariotaku.twidere.R
@@ -38,6 +39,7 @@ class WebLinkHandlerActivity : Activity() {
 
         val (handledIntent, handledSuccessfully) = when (uri.host?.toLowerCase(Locale.US)) {
             "twitter.com", "www.twitter.com", "mobile.twitter.com" -> handleTwitterLink(regulateTwitterUri(uri))
+            "fxtwitter.com", "www.fxtwitter.com", "mobile.fxtwitter.com", "vxtwitter.com", "www.vxtwitter.com", "mobile.vxtwitter.com" -> handleTwitterLink(regulateTwitterUri(handleFixTwitterLink(uri)))
             "fanfou.com" -> handleFanfouLink(uri)
             "twidere.org", "twidere.mariotaku.org" -> handleTwidereExternalLink(uri)
             else -> Pair(null, false)
@@ -117,6 +119,13 @@ class WebLinkHandlerActivity : Activity() {
             }
         }
         return Pair(null, false)
+    }
+
+    private fun handleFixTwitterLink(uri: Uri): Uri {
+        val uriString = uri.toString().replace("fx", "")
+        uriString.replace("c.vx", "")
+        uriString.replace("vx", "")
+        return uriString.toUri()
     }
 
     private fun handleTwitterLink(uri: Uri): Pair<Intent?, Boolean> {

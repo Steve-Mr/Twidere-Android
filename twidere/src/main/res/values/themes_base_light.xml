@@ -19,7 +19,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Twidere.Light" parent="Theme.Material3.DynamicColors.Light">
+    <style name="Theme.Twidere.Light" parent="ThemeOverlay.Material3.DynamicColors.Light">
 
         <!-- Widget styles -->
         <item name="android:listSeparatorTextViewStyle">@style/Widget.Light.TextView.ListSeparator

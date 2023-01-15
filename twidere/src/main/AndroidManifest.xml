@@ -519,6 +519,13 @@
                 <data android:host="twitter.com"/>
                 <data android:host="www.twitter.com"/>
                 <data android:host="mobile.twitter.com"/>
+                <data android:host="fxtwitter.com"/>
+                <data android:host="www.fxtwitter.com"/>
+                <data android:host="mobile.fxtwitter.com"/>
+                <data android:host="vxtwitter.com"/>
+                <data android:host="c.vxtwitter.com"/>
+                <data android:host="www.vxtwitter.com"/>
+                <data android:host="mobile.vxtwitter.com"/>
                 <data android:host="fanfou.com"/>
 
                 <action android:name="android.intent.action.VIEW"/>
