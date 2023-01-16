@@ -705,7 +705,7 @@ class StatusViewHolder(private val adapter: IStatusesAdapter<*>, itemView: View)
                 holder.itemContent -> {
                     if (!holder.isCardActionsShown) {
                         holder.showCardActions()
-                    } else if (holder.hideTempCardActions()) {
+                    } else {
                         listener.onStatusClick(holder, position)
                     }
                 }
