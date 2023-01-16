@@ -84,7 +84,8 @@ class DataExportActivity : BaseActivity(), DataExportImportTypeSelectorDialogFra
                 val i = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION
                         or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-                        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                        or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
                 i
             } else {
                 val i = Intent(this, FileSelectorActivity::class.java)
