@@ -29,6 +29,7 @@ import android.nfc.NfcAdapter
 import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -47,7 +48,10 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.kieronquinn.monetcompat.core.MonetCompat
+import com.kieronquinn.monetcompat.interfaces.MonetColorsChangedListener
 import com.squareup.otto.Bus
+import dev.kdrag0n.monet.theme.ColorScheme
 import nl.komponents.kovenant.Promise
 import org.mariotaku.chameleon.Chameleon
 import org.mariotaku.chameleon.ChameleonActivity
@@ -91,7 +95,9 @@ import javax.inject.Inject
 @SuppressLint("Registered")
 open class BaseActivity : ChameleonActivity(), IBaseActivity<BaseActivity>, IThemedActivity,
         IControlBarActivity, OnApplyWindowInsetsListener, SystemWindowInsetsCallback,
-        KeyboardShortcutCallback, OnPreferenceDisplayDialogCallback {
+        KeyboardShortcutCallback, OnPreferenceDisplayDialogCallback, MonetColorsChangedListener {
+
+    private var monetCompat: MonetCompat? = null
 
     @Inject
     lateinit var keyboardShortcutsHandler: KeyboardShortcutsHandler
@@ -259,6 +265,22 @@ open class BaseActivity : ChameleonActivity(), IBaseActivity<BaseActivity>, IThe
             StrictModeUtils.detectAllVmPolicy()
             StrictModeUtils.detectAllThreadPolicy()
         }
+
+        MonetCompat.setup(this@BaseActivity)
+        monetCompat = MonetCompat.getInstance()
+        monetCompat!!.addMonetColorsChangedListener(this, true)
+        monetCompat!!.updateMonetColors()
+        val sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+
+        if (monetCompat!!.getPrimaryColor(this@BaseActivity) != sharedPref.getInt("theme_color", 114514)){
+            Log.v("LISTENER", "COLOR CHANGED " + monetCompat!!.getPrimaryColor(this@BaseActivity).toString() + " " + sharedPref.getInt("theme_color", 114514).toString())
+            with(sharedPref.edit()){
+                putInt("theme_color", monetCompat!!.getPrimaryColor(this@BaseActivity))
+                apply()
+            }
+//            recreate()
+        }
+
         val themeColor = themePreferences[themeColorKey]
         val themeResource = getThemeResource(themePreferences, themePreferences[themeKey], themeColor)
         if (themeResource != 0) {
@@ -285,11 +307,28 @@ open class BaseActivity : ChameleonActivity(), IBaseActivity<BaseActivity>, IThe
 
     override fun onDestroy() {
         requestManager.onDestroy()
+        monetCompat?.removeMonetColorsChangedListener(this)
+        monetCompat = null
         super.onDestroy()
     }
 
     override fun onResume() {
         super.onResume()
+
+        monetCompat = MonetCompat.getInstance()
+        monetCompat!!.addMonetColorsChangedListener(this, true)
+        monetCompat!!.updateMonetColors()
+        val sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+
+        if (monetCompat!!.getPrimaryColor(this@BaseActivity) != sharedPref.getInt("theme_color", 114514)){
+            Log.v("LISTENER", "COLOR CHANGED " + monetCompat!!.getPrimaryColor(this@BaseActivity).toString() + " " + sharedPref.getInt("theme_color", 114514).toString())
+            with(sharedPref.edit()){
+                putInt("theme_color", monetCompat!!.getPrimaryColor(this@BaseActivity))
+                apply()
+            }
+//            recreate()
+        }
+
         val adapter = NfcAdapter.getDefaultAdapter(this)
         if (adapter != null && adapter.isEnabled) {
             val handlerFilter = IntentUtils.getWebLinkIntentFilter(this)
@@ -546,6 +585,18 @@ open class BaseActivity : ChameleonActivity(), IBaseActivity<BaseActivity>, IThe
     companion object {
 
         private val sClassPrefixList = arrayOf("android.widget.", "android.view.", "android.webkit.")
+    }
+
+    override fun onMonetColorsChanged(
+        monet: MonetCompat,
+        monetColors: ColorScheme,
+        isInitialChange: Boolean
+    ) {
+        val sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+        if (monetCompat!!.getPrimaryColor(this@BaseActivity) != sharedPref.getInt("theme_color", 114514)){
+            Log.v("LISTENER", "COLOR CHANGED " + monetCompat!!.getPrimaryColor(this@BaseActivity).toString() + " " + sharedPref.getInt("theme_color", 114514).toString())
+            recreate()
+        }
     }
 }
 

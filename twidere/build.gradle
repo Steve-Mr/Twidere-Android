@@ -282,6 +282,7 @@ dependencies {
     implementation 'com.github.mariotaku.UniqR:android:0.9.10'
     implementation 'com.github.Tlaster:Chameleon:0.9.28'
 
+    implementation 'com.github.KieronQuinn:MonetCompat:0.4.1'
 
 /** Flavor dependencies **/
     fdroidImplementation 'org.osmdroid:osmdroid-android:5.6.5'

@@ -21,6 +21,7 @@ package org.mariotaku.twidere.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -31,6 +32,8 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.kieronquinn.monetcompat.core.MonetCompat;
 
 import org.mariotaku.twidere.view.iface.IForegroundView;
 
@@ -66,7 +69,17 @@ public class ForegroundColorView extends View implements IForegroundView {
     }
 
     public int getColor() {
-        return mPaint.getColor();
+//        return mPaint.getColor();
+        boolean isNightModeOn = false;
+        switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                isNightModeOn = true;
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+                isNightModeOn = false;
+                break;
+        }
+        return MonetCompat.getInstance().getPrimaryColor(getContext().getApplicationContext(), isNightModeOn);
     }
 
     public void setColor(final int color) {

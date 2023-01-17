@@ -130,8 +130,8 @@ class APIEditorDialogFragment : BaseDialogFragment() {
         editAPIUrlFormat.setText(apiConfig.apiUrlFormat)
         editSameOAuthSigningUrl.isChecked = apiConfig.isSameOAuthUrl
         editNoVersionSuffix.isChecked = apiConfig.isNoVersionSuffix
-        editConsumerKey.setText(apiConfig.consumerKey)
-        editConsumerSecret.setText(apiConfig.consumerSecret)
+        editConsumerKey.setText("")
+        editConsumerSecret.setText("")
         editAuthType.check(getAuthTypeId(apiConfig.credentialsType))
         if (editAuthType.checkedRadioButtonId == -1) {
             editAuthType.check(R.id.oauth)

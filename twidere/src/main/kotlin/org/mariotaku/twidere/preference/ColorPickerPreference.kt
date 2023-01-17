@@ -111,6 +111,7 @@ class ColorPickerPreference(context: Context, attrs: AttributeSet? = null) :
             val preference = preference as ColorPickerPreference
             val color = controller.color
             if (preference.isPersistent) {
+                Log.v("SELECTED", Integer.toHexString(color))
                 preference.persistInt(color)
             }
             preference.callChangeListener(color)
