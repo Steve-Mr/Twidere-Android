@@ -42,7 +42,7 @@ class RandomizeAccountNamePreference @JvmOverloads constructor(
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
         val switchView = holder.findViewById(androidx.preference.R.id.switchWidget) as SwitchCompat
-        switchView.isChecked = getPersistedBoolean(false)
+        switchView.isChecked = getPersistedBoolean(true)
     }
 
     override fun onGetDefaultValue(a: TypedArray, index: Int): Any {

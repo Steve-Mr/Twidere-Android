@@ -32,11 +32,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseIntArray
 import android.view.*
 import android.view.View.OnClickListener
@@ -192,6 +194,9 @@ class HomeActivity : BaseActivity(), OnClickListener, OnPageChangeListener, Supp
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.v(LOGTAG, Color.parseColor("#00BCD4").toString())
+
         multiSelectHandler = MultiSelectEventHandler(this)
         multiSelectHandler.dispatchOnCreate()
         DataStoreUtils.prepareDatabase(this)

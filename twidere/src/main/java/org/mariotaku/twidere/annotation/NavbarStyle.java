@@ -30,7 +30,7 @@ import java.lang.annotation.RetentionPolicy;
 @StringDef({NavbarStyle.DEFAULT, NavbarStyle.COLORED, NavbarStyle.TRANSPARENT})
 @Retention(RetentionPolicy.SOURCE)
 public @interface NavbarStyle {
-    String DEFAULT = "default";
+    String DEFAULT = "transparent";
     String COLORED = "colored";
     String TRANSPARENT = "transparent";
 }

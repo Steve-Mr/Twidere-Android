@@ -22,7 +22,7 @@
         </SwitchPreferenceCompat>
 
         <org.mariotaku.twidere.preference.SeekBarDialogPreference
-            android:defaultValue="20"
+            android:defaultValue="200"
             android:key="load_item_limit"
             android:summary="@string/load_item_limit_summary"
             android:title="@string/load_item_limit"
@@ -90,7 +90,7 @@
             android:summary="@string/display_sensitive_contents_summary"
             android:title="@string/display_sensitive_contents"/>
         <org.mariotaku.twidere.preference.RandomizeAccountNamePreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="randomize_account_name"
             android:summary="@string/preference_randomize_account_name_summary"
             android:title="@string/preference_randomize_account_name"/>

@@ -52,21 +52,21 @@ val stopAutoRefreshWhenBatteryLowKey = KBooleanKey(KEY_STOP_AUTO_REFRESH_WHEN_BA
 val apiLastChangeKey = KLongKey(KEY_API_LAST_CHANGE, -1)
 val bugReportsKey = KBooleanKey(KEY_BUG_REPORTS, BuildConfig.DEBUG)
 val readFromBottomKey = KBooleanKey(KEY_READ_FROM_BOTTOM, false)
-val randomizeAccountNameKey = KBooleanKey(KEY_RANDOMIZE_ACCOUNT_NAME, false)
+val randomizeAccountNameKey = KBooleanKey(KEY_RANDOMIZE_ACCOUNT_NAME, true)
 val defaultAutoRefreshKey = KBooleanKey(KEY_DEFAULT_AUTO_REFRESH, false)
 val defaultAutoRefreshAskedKey = KBooleanKey("default_auto_refresh_asked", true)
-val unreadCountKey = KBooleanKey(KEY_UNREAD_COUNT, true)
+val unreadCountKey = KBooleanKey(KEY_UNREAD_COUNT, false)
 val drawerToggleKey = KBooleanKey(KEY_DRAWER_TOGGLE, false)
 val fabVisibleKey = KBooleanKey(KEY_FAB_VISIBLE, true)
-val themeKey = KStringKey(KEY_THEME, VALUE_THEME_NAME_LIGHT)
-val themeColorKey = KIntKey(KEY_THEME_COLOR, 0)
+val themeKey = KStringKey(KEY_THEME, VALUE_THEME_NAME_AUTO)
+val themeColorKey = KIntKey(KEY_THEME_COLOR, -16728876)
 val filterUnavailableQuoteStatusesKey = KBooleanKey(KEY_FILTER_UNAVAILABLE_QUOTE_STATUSES, false)
 val filterPossibilitySensitiveStatusesKey = KBooleanKey(KEY_FILTER_POSSIBILITY_SENSITIVE_STATUSES, false)
 val chromeCustomTabKey = KBooleanKey(KEY_CHROME_CUSTOM_TAB, true)
 val usageStatisticsKey = KBooleanKey(KEY_USAGE_STATISTICS, false)
 val lightFontKey = KBooleanKey(KEY_LIGHT_FONT, false)
 val extraFeaturesNoticeVersionKey = KIntKey("extra_features_notice_version", 0)
-val mediaPreloadKey = KBooleanKey(KEY_MEDIA_PRELOAD, false)
+val mediaPreloadKey = KBooleanKey(KEY_MEDIA_PRELOAD, true)
 val mediaPreloadOnWifiOnlyKey = KBooleanKey(KEY_PRELOAD_WIFI_ONLY, true)
 val autoRefreshCompatibilityModeKey = KBooleanKey(KEY_AUTO_REFRESH_COMPATIBILITY_MODE,
         Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
@@ -143,7 +143,7 @@ object profileImageStyleKey : KSimpleKey<Int>(KEY_PROFILE_IMAGE_STYLE, ImageShap
 
 }
 
-object mediaPreviewStyleKey : KSimpleKey<Int>(KEY_MEDIA_PREVIEW_STYLE, PreviewStyle.CROP) {
+object mediaPreviewStyleKey : KSimpleKey<Int>(KEY_MEDIA_PREVIEW_STYLE, PreviewStyle.ACTUAL_SIZE) {
     override fun read(preferences: SharedPreferences): Int {
         return when (preferences.getString(key, null)) {
             VALUE_MEDIA_PREVIEW_STYLE_SCALE -> PreviewStyle.SCALE
@@ -163,7 +163,7 @@ object mediaPreviewStyleKey : KSimpleKey<Int>(KEY_MEDIA_PREVIEW_STYLE, PreviewSt
 
 }
 
-object linkHighlightOptionKey : KSimpleKey<Int>(KEY_LINK_HIGHLIGHT_OPTION, VALUE_LINK_HIGHLIGHT_OPTION_CODE_NONE) {
+object linkHighlightOptionKey : KSimpleKey<Int>(KEY_LINK_HIGHLIGHT_OPTION, VALUE_LINK_HIGHLIGHT_OPTION_CODE_HIGHLIGHT) {
     override fun read(preferences: SharedPreferences): Int = when (preferences.getString(key, null)) {
         VALUE_LINK_HIGHLIGHT_OPTION_BOTH -> VALUE_LINK_HIGHLIGHT_OPTION_CODE_BOTH
         VALUE_LINK_HIGHLIGHT_OPTION_UNDERLINE -> VALUE_LINK_HIGHLIGHT_OPTION_CODE_UNDERLINE

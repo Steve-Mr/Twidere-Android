@@ -36,7 +36,7 @@ class MediaPreloader(val context: Context) {
 
     var isNetworkMetered: Boolean = true
 
-    private var preloadEnabled: Boolean = false
+    private var preloadEnabled: Boolean = true
     private var preloadOnWifiOnly: Boolean = true
 
     private val shouldPreload: Boolean get() = preloadEnabled && (!preloadOnWifiOnly || !isNetworkMetered)

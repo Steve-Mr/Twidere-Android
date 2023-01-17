@@ -31,7 +31,7 @@
             android:value="true"/>
     </SwitchPreferenceCompat>
     <SwitchPreferenceCompat
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="unread_count"
         android:title="@string/unread_count">
         <extra

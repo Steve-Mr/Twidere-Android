@@ -5,7 +5,7 @@
     android:title="@string/network">
 
     <SwitchPreferenceCompat
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:key="media_preload"
         android:title="@string/media_preload"/>
 
