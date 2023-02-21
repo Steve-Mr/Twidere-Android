@@ -22,6 +22,7 @@ package org.mariotaku.twidere.activity
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.*
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Rect
@@ -30,10 +31,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.util.Log
-import android.view.KeyEvent
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
+import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.TwilightManagerAccessor
 import androidx.appcompat.view.menu.ActionMenuItemView
@@ -260,6 +259,7 @@ open class BaseActivity : ChameleonActivity(), IBaseActivity<BaseActivity>, IThe
         return false
     }
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         if (BuildConfig.DEBUG) {
             StrictModeUtils.detectAllVmPolicy()
@@ -272,13 +272,29 @@ open class BaseActivity : ChameleonActivity(), IBaseActivity<BaseActivity>, IThe
         monetCompat!!.updateMonetColors()
         val sharedPref = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                recreate()
+                window.decorView.windowInsetsController?.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                )
+            } // Night mode is not active, we're using the light theme
+            Configuration.UI_MODE_NIGHT_YES -> {
+                recreate()
+                window.decorView.windowInsetsController?.setSystemBarsAppearance(
+                    0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                )
+            } // Night mode is active, we're using dark theme
+        }
+
         if (monetCompat!!.getPrimaryColor(this@BaseActivity) != sharedPref.getInt("theme_color", 114514)){
             Log.v("LISTENER", "COLOR CHANGED " + monetCompat!!.getPrimaryColor(this@BaseActivity).toString() + " " + sharedPref.getInt("theme_color", 114514).toString())
             with(sharedPref.edit()){
                 putInt("theme_color", monetCompat!!.getPrimaryColor(this@BaseActivity))
                 apply()
             }
-//            recreate()
+            recreate()
         }
 
         val themeColor = themePreferences[themeColorKey]
@@ -326,7 +342,7 @@ open class BaseActivity : ChameleonActivity(), IBaseActivity<BaseActivity>, IThe
                 putInt("theme_color", monetCompat!!.getPrimaryColor(this@BaseActivity))
                 apply()
             }
-//            recreate()
+            recreate()
         }
 
         val adapter = NfcAdapter.getDefaultAdapter(this)
