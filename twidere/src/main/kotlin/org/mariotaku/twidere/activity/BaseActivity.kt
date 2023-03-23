@@ -274,14 +274,14 @@ open class BaseActivity : ChameleonActivity(), IBaseActivity<BaseActivity>, IThe
 
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
-                recreate()
+//                recreate()
                 window.decorView.windowInsetsController?.setSystemBarsAppearance(
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
                 )
             } // Night mode is not active, we're using the light theme
             Configuration.UI_MODE_NIGHT_YES -> {
-                recreate()
+//                recreate()
                 window.decorView.windowInsetsController?.setSystemBarsAppearance(
                     0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
                 )
